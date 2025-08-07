@@ -51,7 +51,7 @@ class UrbanRoutesPage:
     payment_method = (By.XPATH, '//*[@id="root"]/div/div[3]/div[3]/div[2]/div[2]/div[2]')
     addCardButton = (By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div[1]/div[2]/div[3]')
     card_number = (By.XPATH, '//*[@id="number"]')
-    cardCvv = (By.XPATH, '//*[@id="code"]')
+    cardCvv = (By.NAME, 'code')
     next_button = (By.XPATH, '//*[@id="root"]/div/div[1]/div[2]/div[1]/form/div[2]/button')
     add_button = (By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div[2]/form/div[3]/button[1]')
     messageForDriver = (By.ID, 'comment')
@@ -62,6 +62,7 @@ class UrbanRoutesPage:
     sms_codes = (By. ID, 'code')
     submitSmsCodeButton = (By.XPATH, '//*[@id="root"]/div/div[1]/div[2]/div[2]/form/div[2]/button[1]')
     carCheckBox = (By.XPATH, '//*[@id="card-1"]')
+
 
     def __init__(self, driver):
         self.driver = driver
@@ -121,7 +122,7 @@ class UrbanRoutesPage:
         return self.driver.find_element(*self.cardCvv).get_property('value')
 
     def click_add_button(self):
-        self.wait.until(expected_conditions.element_to_be_clickable(*self.add_button)).click()
+        self.driver.find_element(*self.add_button).click()
 
     def set_message_to_driver(self):
         self.driver.find_element(*self.messageForDriver).send_keys(data.message_for_driver)
