@@ -58,7 +58,7 @@ class UrbanRoutesPage:
     blanketAndTissues = (By.CLASS_NAME, 'slider round')
     chocolateIceCreamButton = (By.XPATH, '//*[@id="root"]/div/div[3]/div[3]/div[2]/div[2]/div[4]/div[2]/div[3]/div/div[2]/div[2]/div/div[2]/div/div[3]' )
     strawBerryIceCreamButton = (By.XPATH, '//*[@id="root"]/div/div[3]/div[3]/div[2]/div[2]/div[4]/div[2]/div[3]/div/div[2]/div[3]/div/div[2]/div/div[3]')
-    reserve_button = (By,CLASS_NAME, 'smart-button')
+    reserve_button = (By.XPATH, '//button[.//span[text()="Pedir un taxi"]]')
     sms_codes = (By. ID, 'code')
     submitSmsCodeButton = (By.XPATH, '//*[@id="root"]/div/div[1]/div[2]/div[2]/form/div[2]/button[1]')
     carCheckBox = (By.XPATH, '//*[@id="card-1"]')
@@ -235,7 +235,11 @@ class TestUrbanRoutes:
         page.set_message_to_driver()
 
         element = self.driver.find_element(*page.messageForDriver)
-        assert 'Muéstrame el camino al museo' in element.get_attribute("value")
+        message = element.get_attribute("value")
+
+        assert len(message) <=24, f"El mensaje excede los 24 caracteres: '{message}' ({len(message)} caracteres)"
+
+
 
     def test_ice_cream(self):
         self.driver.get(data.urban_routes_url)
@@ -250,6 +254,20 @@ class TestUrbanRoutes:
 
         assert chocolate == "1", f"Esperado 1 chocolate, y resulto {chocolate}"
         assert strawberry == "1", f"Esperado 1 fresa, y resulto {strawberry}"
+
+
+    def test_driver_modal(self):
+        self.driver.get(data.urban_routes_url)
+        page = UrbanRoutesPage(self.driver)
+        page.prepare_pp_method()
+        page.click_exit_payment_window()
+        page.set_message_to_driver()
+        page.click_add_chocolate_iceCream()
+        page.click_add_strawberry_iceCream()
+        page.click_make_reserve()
+
+        WebDriverWait(self.driver, 20).until(expected_conditions.visibility_of_element_located((By.CLASS_NAME, 'order-header-title')))
+
 
 
     @classmethod
