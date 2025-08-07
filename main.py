@@ -228,6 +228,7 @@ class TestUrbanRoutes:
     def test_message_to_driver(self):
         self.driver.get(data.urban_routes_url)
         page = UrbanRoutesPage(self.driver)
+        page.prepare_pp_method()
         page.set_message_to_driver()
 
         element = self.driver.find_element(*page.messageForDriver)
