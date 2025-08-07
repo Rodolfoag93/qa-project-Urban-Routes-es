@@ -146,37 +146,37 @@ class UrbanRoutesPage:
 
     def prepare_basic_route(self):
         self.driver.get(data.urban_routes_url)
-        page = UrbanRoutesPage(self.driver)
-        page.set_route(data.address_from, data.address_to)
-        return page
+        #page = UrbanRoutesPage(self.driver)
+        self.set_route(data.address_from, data.address_to)
+        #return page
 
     def prepare_comfort_tariff(self):
-        page = self.prepare_basic_route()
-        page.set_tariff_flash()
-        page.set_taxi()
-        page.click_askForACab()
-        page.set_comfort_tariff()
-        return page
+        self.prepare_basic_route()
+        self.set_tariff_flash()
+        self.set_taxi()
+        self.click_askForACab()
+        self.set_comfort_tariff()
+        #return self
 
     def prepare_phone_input(self):
-        page = self.prepare_comfort_tariff()
-        page.click_phone_button()
-        page.set_phone_input()
-        page.set_phone_info()
-        page.set_sms_code()
-        page.click_submit_sms_code_buttom()
+        self.prepare_comfort_tariff()
+        self.click_phone_button()
+        self.set_phone_input()
+        self.set_phone_info()
+        self.set_sms_code()
+        self.click_submit_sms_code_buttom()
+        #return self
 
-        return page
 
     def prepare_pp_method(self):
-        page = self.prepare_phone_input()
-        page.click_payment_method()
-        page.click_add_new_card()
-        page.set_card_number()
-        page.set_cardCvv()
-        page.click_add_button()
+        self.prepare_phone_input()
+        self.click_payment_method()
+        self.click_add_new_card()
+        self.set_card_number()
+        self.set_cardCvv()
+        self.click_add_button()
 
-        return page
+        #return self
 
 class TestUrbanRoutes:
 
@@ -191,9 +191,6 @@ class TestUrbanRoutes:
         cls.driver = webdriver.Chrome()
 
 
-
-
-
     def test_set_route(self):
         self.driver.get(data.urban_routes_url)
         routes_page = UrbanRoutesPage(self.driver)
@@ -205,28 +202,31 @@ class TestUrbanRoutes:
 
     def test_set_comfort_tariff(self):
         self.driver.get(data.urban_routes_url)
-        page = self.prepare_comfort_tariff()
+        page = UrbanRoutesPage(self.driver)
+        page.prepare_comfort_tariff()
 
         element =self.driver.find_element(*page.comfort_tariff)
         assert "tcard active" in element.get_attribute("class")
 
     def test_set_phone_input(self):
         self.driver.get(data.urban_routes_url)
-        page = self.prepare_phone_input()
+        page = UrbanRoutesPage(self.driver)
+        page.prepare_phone_input()
 
         element = self.driver.find_element(*page.phone_input)
         assert '+13235554817' in element.get_attribute('value')
 
     def test_add_new_card(self):
         self.driver.get(data.urban_routes_url)
-        page = self.prepare_pp_method()
+        page = UrbanRoutesPage(self.driver)
+        page.prepare_pp_method()
 
         element = self.driver.find_element(*page.carCheckBox)
         assert 'checkbox' in element.get_attribute("class")
 
     def test_message_to_driver(self):
         self.driver.get(data.urban_routes_url)
-        page = self.prepare_pp_method()
+        page = UrbanRoutesPage(self.driver)
         page.set_message_to_driver()
 
         element = self.driver.find_element(*page.messageForDriver)
@@ -234,7 +234,7 @@ class TestUrbanRoutes:
 
     def test_ice_cream(self):
         self.driver.get(data.urban_routes_url)
-        page = self.prepare_pp_method()
+        page = UrbanRoutesPage(self.driver)
         page.click_add_chocolate_iceCream()
         page.click_add_strawberry_iceCream()
 
