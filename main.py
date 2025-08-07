@@ -62,7 +62,7 @@ class UrbanRoutesPage:
     sms_codes = (By. ID, 'code')
     submitSmsCodeButton = (By.XPATH, '//*[@id="root"]/div/div[1]/div[2]/div[2]/form/div[2]/button[1]')
     carCheckBox = (By.XPATH, '//*[@id="card-1"]')
-
+    exit_payment_window = (By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div[1]/button')
 
     def __init__(self, driver):
         self.driver = driver
@@ -123,6 +123,9 @@ class UrbanRoutesPage:
 
     def click_add_button(self):
         self.driver.find_element(*self.add_button).click()
+
+    def click_exit_payment_window(self):
+        self.driver.find_element(*self.exit_payment_window).click()
 
     def set_message_to_driver(self):
         self.driver.find_element(*self.messageForDriver).send_keys(data.message_for_driver)
@@ -237,9 +240,16 @@ class TestUrbanRoutes:
     def test_ice_cream(self):
         self.driver.get(data.urban_routes_url)
         page = UrbanRoutesPage(self.driver)
+        page.prepare_pp_method()
+        page.click_exit_payment_window()
         page.click_add_chocolate_iceCream()
         page.click_add_strawberry_iceCream()
 
+        chocolate = self.driver.find_element(By.XPATH, '//*[@id="root"]/div/div[3]/div[3]/div[2]/div[2]/div[4]/div[2]/div[3]/div/div[2]/div[2]/div/div[2]/div/div[2]').text
+        strawberry = self.driver.find_element(By.XPATH, '//*[@id="root"]/div/div[3]/div[3]/div[2]/div[2]/div[4]/div[2]/div[3]/div/div[2]/div[3]/div/div[2]/div/div[2]').text
+
+        assert chocolate == "1", f"Esperado 1 chocolate, y resulto {chocolate}"
+        assert strawberry == "1", f"Esperado 1 fresa, y resulto {strawberry}"
 
 
     @classmethod
