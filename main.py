@@ -55,7 +55,7 @@ class UrbanRoutesPage:
     next_button = (By.XPATH, '//*[@id="root"]/div/div[1]/div[2]/div[1]/form/div[2]/button')
     add_button = (By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div[2]/form/div[3]/button[1]')
     messageForDriver = (By.ID, 'comment')
-    blanketAndTissues = (By.CLASS_NAME, 'slider round')
+    blanketAndTissues = (By.XPATH, '//*[@id="root"]/div/div[3]/div[3]/div[2]/div[2]/div[4]/div[2]/div[1]/div/div[2]/div/span')
     chocolateIceCreamButton = (By.XPATH, '//*[@id="root"]/div/div[3]/div[3]/div[2]/div[2]/div[4]/div[2]/div[3]/div/div[2]/div[2]/div/div[2]/div/div[3]' )
     strawBerryIceCreamButton = (By.XPATH, '//*[@id="root"]/div/div[3]/div[3]/div[2]/div[2]/div[4]/div[2]/div[3]/div/div[2]/div[3]/div/div[2]/div/div[3]')
     reserve_button = (By.XPATH, '//button[.//span[text()="Pedir un taxi"]]')
@@ -129,6 +129,9 @@ class UrbanRoutesPage:
 
     def set_message_to_driver(self):
         self.driver.find_element(*self.messageForDriver).send_keys(data.message_for_driver)
+
+    def click_add_blanket_and_tissues(self):
+        self.driver.find_element(*self.blanketAndTissues).click()
 
     def click_add_chocolate_iceCream(self):
         self.driver.find_element(*self.chocolateIceCreamButton).click()
@@ -238,6 +241,16 @@ class TestUrbanRoutes:
         message = element.get_attribute("value")
 
         assert len(message) <=24, f"El mensaje excede los 24 caracteres: '{message}' ({len(message)} caracteres)"
+
+    def test_blanket_and_tissues(self):
+        self.driver.get(data.urban_routes_url)
+        page = UrbanRoutesPage(self.driver)
+        page.prepare_pp_method()
+        page.click_exit_payment_window()
+        page.click_add_blanket_and_tissues()
+
+        checkbox = self.driver.find_element(By.CSS_SELECTOR, "input.switch-input")
+        assert checkbox.get_attribute("checked") is not None, "El switch no está marcado (no tiene 'checked')"
 
 
 
