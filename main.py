@@ -197,7 +197,6 @@ class TestUrbanRoutes:
         capabilities["goog:loggingPrefs"] = {'performance': 'ALL'}
         cls.driver = webdriver.Chrome()
 
-
     def test_set_route(self):
         self.driver.get(data.urban_routes_url)
         routes_page = UrbanRoutesPage(self.driver)
@@ -252,8 +251,6 @@ class TestUrbanRoutes:
         checkbox = self.driver.find_element(By.CSS_SELECTOR, "input.switch-input")
         assert checkbox.get_attribute("checked") is not None, "El switch no está marcado (no tiene 'checked')"
 
-
-
     def test_ice_cream(self):
         self.driver.get(data.urban_routes_url)
         page = UrbanRoutesPage(self.driver)
@@ -267,7 +264,6 @@ class TestUrbanRoutes:
 
         assert chocolate == "1", f"Esperado 1 chocolate, y resulto {chocolate}"
         assert strawberry == "1", f"Esperado 1 fresa, y resulto {strawberry}"
-
 
     def test_driver_modal(self):
         self.driver.get(data.urban_routes_url)
